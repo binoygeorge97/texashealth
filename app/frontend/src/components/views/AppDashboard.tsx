@@ -19,8 +19,8 @@ export default function AppDashboard({ onStart }: { onStart: () => void }) {
         </div>
       </div>
 
-      {/* Bento Grid */}
-      <div className="grid grid-cols-2 gap-4 flex-1">
+      {/* Bento Grid - Main Status */}
+      <div className="grid grid-cols-2 gap-4">
         
         {/* Status Card */}
         <div className="col-span-2 bg-white dark:bg-[#1c1c1e] rounded-[2rem] p-6 shadow-apple flex items-center justify-between">
@@ -47,6 +47,50 @@ export default function AppDashboard({ onStart }: { onStart: () => void }) {
           </div>
         </div>
 
+      </div>
+
+      {/* Urgency Statistics Grid */}
+      <div className="mt-8 flex-1">
+        <h2 className="text-xl font-bold text-black dark:text-white tracking-tight mb-4 px-1">
+          Urgency Statistics
+        </h2>
+        <div className="grid grid-cols-2 gap-4">
+          {/* Card 1 */}
+          <div className="bg-white dark:bg-[#1c1c1e] rounded-3xl p-5 shadow-apple flex flex-col justify-between">
+            <h3 className="text-gray-500 dark:text-gray-400 font-semibold text-[10px] uppercase tracking-wider mb-2">Global Cases</h3>
+            <p className="text-3xl font-bold text-black dark:text-white tracking-tighter">
+              18.6<span className="text-lg text-gray-500 font-semibold ml-1">M</span>
+            </p>
+            <p className="text-gray-400 text-xs mt-1 font-medium">annually</p>
+          </div>
+          
+          {/* Card 2 */}
+          <div className="bg-white dark:bg-[#1c1c1e] rounded-3xl p-5 shadow-apple flex flex-col justify-between">
+            <h3 className="text-gray-500 dark:text-gray-400 font-semibold text-[10px] uppercase tracking-wider mb-2">Amputation Rate</h3>
+            <p className="text-3xl font-bold text-black dark:text-white tracking-tighter">
+              30<span className="text-lg text-gray-500 font-semibold ml-1">sec</span>
+            </p>
+            <p className="text-gray-500 text-xs mt-1 font-medium leading-tight">1 amputation globally</p>
+          </div>
+
+          {/* Card 3 */}
+          <div className="bg-white dark:bg-[#1c1c1e] rounded-3xl p-5 shadow-apple flex flex-col justify-between">
+            <h3 className="text-gray-500 dark:text-gray-400 font-semibold text-[10px] uppercase tracking-wider mb-2">5-Yr Mortality</h3>
+            <p className="text-3xl font-bold text-black dark:text-white tracking-tighter">
+              40-70<span className="text-lg text-gray-500 font-semibold">%</span>
+            </p>
+            <p className="text-gray-400 text-xs mt-1 font-medium">post-amputation</p>
+          </div>
+
+          {/* Card 4 */}
+          <div className="bg-white dark:bg-[#1c1c1e] rounded-3xl p-5 shadow-apple flex flex-col justify-between">
+            <h3 className="text-gray-500 dark:text-gray-400 font-semibold text-[10px] uppercase tracking-wider mb-2">Global Costs</h3>
+            <p className="text-3xl font-bold text-black dark:text-white tracking-tighter">
+              $96.8<span className="text-lg text-gray-500 font-semibold ml-1">B</span>
+            </p>
+            <p className="text-gray-400 text-xs mt-1 font-medium">medical costs</p>
+          </div>
+        </div>
       </div>
 
       {/* Primary CTA fixed to bottom */}
