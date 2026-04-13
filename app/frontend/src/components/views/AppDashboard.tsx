@@ -52,7 +52,7 @@ export default function AppDashboard({ onStart }: { onStart: () => void }) {
       {/* Urgency Statistics Grid */}
       <div className="mt-8 flex-1">
         <h2 className="text-xl font-bold text-black dark:text-white tracking-tight mb-4 px-1">
-          Urgency Statistics
+          Why It Matters
         </h2>
         <div className="grid grid-cols-2 gap-4">
           {/* Card 1 */}
