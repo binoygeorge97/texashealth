@@ -1,7 +1,8 @@
 import { Camera, Activity, FileStack, ChevronRight } from "lucide-react";
-import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { SignInButton, UserButton, useAuth } from "@clerk/nextjs";
 
 export default function AppDashboard({ onStart }: { onStart: () => void }) {
+  const { isLoaded, isSignedIn } = useAuth();
   return (
     <div className="flex flex-col h-full animate-in fade-in duration-500 pt-16 px-5 pb-8 min-h-screen">
       
@@ -16,12 +17,7 @@ export default function AppDashboard({ onStart }: { onStart: () => void }) {
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <SignedOut>
-            <div className="border border-[#007aff] text-[#007aff] px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-[#007aff]/10 transition-colors">
-              <SignInButton mode="modal" />
-            </div>
-          </SignedOut>
-          <SignedIn>
+          {!isLoaded ? null : isSignedIn ? (
             <UserButton 
               appearance={{
                 elements: {
@@ -29,7 +25,11 @@ export default function AppDashboard({ onStart }: { onStart: () => void }) {
                 }
               }}
             />
-          </SignedIn>
+          ) : (
+            <div className="border border-[#007aff] text-[#007aff] px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-[#007aff]/10 transition-colors">
+              <SignInButton mode="modal" />
+            </div>
+          )}
         </div>
       </div>
 
