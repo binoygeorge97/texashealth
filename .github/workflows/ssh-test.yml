@@ -1,0 +1,21 @@
+on:
+  workflow_dispatch:
+
+jobs:
+  ssh_test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH to Azure VM and run basic commands
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: 22
+          script: |
+            set -e
+            echo "Connected successfully"
+            whoami
+            hostname
+            uptime
+            pwd
