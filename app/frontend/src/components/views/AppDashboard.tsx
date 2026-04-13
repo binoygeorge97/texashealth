@@ -1,4 +1,5 @@
 import { Camera, Activity, FileStack, ChevronRight } from "lucide-react";
+import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 export default function AppDashboard({ onStart }: { onStart: () => void }) {
   return (
@@ -14,8 +15,21 @@ export default function AppDashboard({ onStart }: { onStart: () => void }) {
             Wound Management
           </p>
         </div>
-        <div className="bg-red-50 dark:bg-red-900/20 w-10 h-10 rounded-full flex items-center justify-center border border-red-100 dark:border-red-900 shadow-sm">
-          <Activity className="text-red-500 w-5 h-5" />
+        <div className="flex items-center gap-3">
+          <SignedOut>
+            <div className="border border-[#007aff] text-[#007aff] px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-[#007aff]/10 transition-colors">
+              <SignInButton mode="modal" />
+            </div>
+          </SignedOut>
+          <SignedIn>
+            <UserButton 
+              appearance={{
+                elements: {
+                  avatarBox: "w-10 h-10 border border-gray-200 dark:border-gray-800"
+                }
+              }}
+            />
+          </SignedIn>
         </div>
       </div>
 
