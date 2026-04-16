@@ -25,34 +25,27 @@ jobs:
 
       - name: Build Next.js
         env:
-          # Next.js requires these at build time for static generation/hydration
           NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
           CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
           UPLOADTHING_TOKEN: ${{ secrets.UPLOADTHING_TOKEN }}
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
-        run: |
-          cd app/frontend
-          npm run build
+        run: npm run build --workspace=app/frontend
 
-      - name: Prepare Deployment Package
-        # Standalone output doesn't include 'static' or 'public' by default
+      - name: Compress .next build output
+        # We only compress the compiled output, NOT node_modules (much smaller)
         run: |
-          cd app/frontend
-          mkdir -p .next/standalone/.next/static
-          cp -r .next/static/. .next/standalone/.next/static/
-          cp -r public/. .next/standalone/public/
-          tar -czf ../../deploy.tar.gz -C .next/standalone .
+          tar -czf next-build.tar.gz -C app/frontend .next
 
-      - name: Copy Archive to VM
+      - name: Copy .next build to VM
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
-          source: "deploy.tar.gz"
-          target: "/home/${{ secrets.USERNAME }}/texashealth/deploy"
+          source: "next-build.tar.gz"
+          target: "/tmp"
 
-      - name: Extract and Restart PM2
+      - name: Deploy on VM
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.HOST }}
@@ -60,13 +53,22 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           command_timeout: 10m
           script: |
-            DEPLOY_DIR=/home/${{ secrets.USERNAME }}/texashealth/app/frontend/dist
-            rm -rf $DEPLOY_DIR
-            mkdir -p $DEPLOY_DIR
-            tar -xzf /home/${{ secrets.USERNAME }}/texashealth/deploy/deploy.tar.gz -C $DEPLOY_DIR
-            
-            cd $DEPLOY_DIR
-            # Restart or start the PM2 process using node directly on the standalone server
-            sudo pm2 delete texashealth-ui || true
-            sudo pm2 start server.js --name texashealth-ui
-            sudo pm2 save
+            set -e
+            APP_DIR=~/texashealth/app/frontend
+
+            # Pull latest source files (package.json, source code, etc.)
+            cd ~/texashealth
+            git fetch origin main
+            git reset --hard origin/main
+
+            # Replace the .next folder with our CI-built one
+            cd $APP_DIR
+            rm -rf .next
+            tar -xzf /tmp/next-build.tar.gz -C $APP_DIR
+
+            # Install only production deps (fast, no compilation)
+            npm ci --omit=dev
+
+            # Restart PM2
+            sudo env "PATH=$PATH" pm2 restart texashealth-ui
+            sudo env "PATH=$PATH" pm2 status
