@@ -31,6 +31,7 @@ jobs:
             npm run build
 
             sudo env "PATH=$PATH" pm2 delete texashealth-ui || true
-            sudo env "PATH=$PATH" pm2 start npm --name texashealth-ui -- run start
+            cd ~/texashealth/app/frontend
+            sudo env "PATH=$PATH" PORT=80 pm2 start npm --name texashealth-ui -- run start
             sudo env "PATH=$PATH" pm2 save
             sudo env "PATH=$PATH" pm2 status
