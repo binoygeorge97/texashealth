@@ -95,7 +95,7 @@ export default async function DashboardPage() {
 
           <div className="mt-8 mb-6">
             <Link
-              href="/"
+              href="/assessments/new"
               className="w-full bg-[#007aff] dark:bg-[#0a84ff] hover:opacity-90 active:scale-[0.98] transition-all duration-200 text-white font-semibold rounded-2xl py-4 flex items-center justify-center shadow-apple shadow-blue-500/20"
             >
               <Camera className="w-5 h-5 mr-2" />
